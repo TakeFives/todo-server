@@ -12,6 +12,10 @@ app.get('/todos', todoController.getTodos);
 
 app.get('/todos/:id', todoController.getTodo);
 
+app.post('/todos', todoController.addTodo);
+
+app.put('/todos/:id', todoController.completeTodo);
+
 app.delete('/todos/:id', todoController.removeTodo);
 
 app.listen(port, () => {
