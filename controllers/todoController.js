@@ -27,6 +27,51 @@ exports.getTodo = (req, res) => {
   }
 };
 
+exports.addTodo = (req, res) => {
+  try {
+    const { userId, title } = req.body;
+
+    if (!userId || !title ) {
+      console.log(userId, title)
+      return res.status(400).json({ message: "Please add Todo with valid request data" });
+    }
+
+    const newTodo = {
+      id: Date.now(),
+      userId,
+      title,
+      completed: false,
+    };
+
+    todos.push(newTodo);
+
+    res.status(201).json({ message: "Yey, new Todo added successfully!", todo: newTodo });
+  } catch (error) {
+    res.status(500).json({ message: "Server error while adding the todo" });
+  }
+};
+
+exports.completeTodo = (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = todos.find((item) => item.id === +id);
+
+     if (!todo) {
+      return res.status(404).json({ message: "Oops, no Todo with this id!" });
+    }
+
+    if (todo.completed) {
+      return res.status(400).json({ message: "Hey, this one is already done" });
+    }
+
+    todo.completed = true;
+
+    res.status(201).json({ message: "Yey, this Todo compleeted successfully!", todo: todo });
+  } catch (error) {
+    res.status(500).json({ message: "Server error while editing the todo" });
+  }
+};
+
 exports.removeTodo = (req, res) => {
   try {
     const { id } = req.params;
